@@ -4,7 +4,6 @@ function generateJobRejectionEmailTemplate({
     companyName,
     contactEmail,
   }) {
-        // Generate an HTML email template for job rejection
     return `
         <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
           <h1 style="color: #D9534F;">Application Decision</h1>
@@ -26,7 +25,7 @@ function generateJobRejectionEmailTemplate({
         </div>
       `;
   }
-    // Export the function for use in other modules
+  
   module.exports = {
     generateJobRejectionEmailTemplate,
   };
