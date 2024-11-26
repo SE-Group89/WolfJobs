@@ -5,7 +5,7 @@ function generateJobSelectionEmailTemplate({
     contactEmail,
     startDate,
     onboardingDetails,
-  }) {
+  }) {     // Generate an HTML email template for job selection and onboarding
     return `
         <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
           <h1 style="color: #0B5394;">Welcome Aboard, ${applicantName}!</h1>
@@ -30,7 +30,7 @@ function generateJobSelectionEmailTemplate({
         </div>
       `;
   }
-  
+    // Export the function for use in other modules
   module.exports = {
     generateJobSelectionEmailTemplate,
   };

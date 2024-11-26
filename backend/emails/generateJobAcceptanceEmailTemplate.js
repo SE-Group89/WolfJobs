@@ -6,6 +6,7 @@ function generateJobAcceptanceEmailTemplate({
     applicationDate,
     nextSteps,
   }) {
+        // Generate an HTML email template for job acceptance
     return `
         <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
           <h1 style="color: #0B5394;">Congratulations on Your Application Acceptance!</h1>
@@ -28,6 +29,7 @@ function generateJobAcceptanceEmailTemplate({
         </div>
       `;
   }
-  
+
+  // Export the function for use in other modules
   module.exports = { generateJobAcceptanceEmailTemplate };
   
