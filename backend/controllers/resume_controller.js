@@ -2,19 +2,19 @@
 const Resume = require('../models/resume');
 const User = require('../models/user');
 
-const multer = require('multer');
+const multer = require('multer'); // Middleware for handling file uploads
 
-const upload = multer({
+const upload = multer({ //Configure multer for file uploads
   limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(pdf)$/)) {
+    if (!file.originalname.match(/\.(pdf)$/)) { // Accept only pdf files
       return cb(new Error('Please upload a PDF file'));
     }
     cb(undefined, true);
   }
 });
 
-// Resume upload handler
+// Handles resume upload, updates user's resume, and replaces old resume if it exists
 exports.uploadResume = async (req, res) => {
   // first look for a resume with the same applicantId
   const existingResume = await Resume.findOne({
@@ -42,7 +42,7 @@ exports.uploadResume = async (req, res) => {
     });
     await resume.save();
 
-    // update the user's resumeId
+    // Link the resume to the user
     user.resumeId = resume._id;
     user.resume = resume.fileName
     await user.save();
@@ -52,10 +52,10 @@ exports.uploadResume = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
-
+// Retrieves and serves a user's resume as a pdf
 exports.getResume = async (req, res) => {
   try {
-    const resume = await Resume.findOne({ applicantId: req.params.id });
+    const resume = await Resume.findOne({ applicantId: req.params.id }); // Find the resume by applicant ID
     if (!resume) {
       return res.status(404).send({ error: 'Resume not found' });
     }
@@ -71,6 +71,7 @@ exports.getResume = async (req, res) => {
 // Make sure to export the multer upload as well
 exports.upload = upload;
 
+//Ping endpoint for testing server availability
 exports.ping = (req, res) => {
   res.send({ message: 'Pong' });
 };
