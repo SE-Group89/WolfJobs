@@ -6,7 +6,7 @@ const port = 8000;
 
 const expressLayouts = require("express-ejs-layouts");
 
-const db = require("./config/mongoose");
+const connectDB = require("./config/mongoose");
 
 //Used for session cookie
 
@@ -18,7 +18,14 @@ const passportLocal = require("./config/passport-local-strategy");
 
 const passportJWT = require("./config/passport-jwt-strategy");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    credentials: true,
+  })
+);
+
+app.use(express.json());
 
 app.use(express.urlencoded());
 
@@ -60,10 +67,20 @@ app.use(passport.setAuthenticatedUser);
 
 app.use("/", require("./routes"));
 
-app.listen(port, function (err) {
-  if (err) {
-    console.log("Error", err);
-  }
+async function startServer() {
+  try {
+    await connectDB();
+    console.log("Connected to database :: MongoDB");
 
-  console.log("Server is running on", port);
-});
+    const server = app.listen(8000, () => {
+      console.log(`Server is running on port ${8000}`);
+    });
+
+    // Export the server for testing
+    module.exports = server;
+  } catch (error) {
+    console.error("Error starting server:", error);
+  }
+}
+
+startServer();
