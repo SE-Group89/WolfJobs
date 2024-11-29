@@ -172,27 +172,6 @@ Your app is ready to be deployed!
 
 # Contributors
 
-  <table>
-  <tr>
-    <td align="center"><a href="https://github.com/deepr41"><img src="https://avatars.githubusercontent.com/deepr41" width="100px;" alt=""/><br /><b>Deepak Rajendran</b></a></td>
-    <td align="center"><a href="https://github.com/shafa112"><img src="https://avatars.githubusercontent.com/shafa112" width="100px;" alt=""/><br /><b>Shafa Hassan</b></a><br /></td>
-    <td align="center"><a href="https://github.com/Janhavi-23"><img src="https://avatars.githubusercontent.com/Janhavi-23" width="100px;" alt=""/><br /><b>Janhavi Pendse</b></a><br /></td>
-    <td align="center"><a href="https://github.com/deepp2905"><img src="https://avatars.githubusercontent.com/deepp2905" width="100px;" alt=""/><br /><b>Deep Patel</b></a><br /></td>
-
-
-   
-  </tr>
-</table>
-
-## Iteration 2:
- <table>
-  <tr>
-    <td align="center"><a href="https://github.com/sanjitkverma"><img src="https://avatars.githubusercontent.com/sanjitkverma" width="100px;" alt=""/><br /><b>Sanjit Verma</b></a></td>
-    <td align="center"><a href="https://github.com/arul28"><img src="https://avatars.githubusercontent.com/arul28" width="100px;" alt=""/><br /><b>Arul Sharma</b></a><br /></td>
-    <td align="center"><a href="https://github.com/Harris-A-Khan"><img src="https://avatars.githubusercontent.com/Harris-A-Khan" width="100px;" alt=""/><br /><b>Harris Khan </b></a><br /></td>
-    <td align="center"><a href="https://github.com/Sarvesh-Somasundaram"><img src="https://avatars.githubusercontent.com/Sarvesh-Somasundaram" width="100px;" alt=""/><br /><b>Sarvesh Somasundaram</b></a><br /></td>
-
-
-   
-  </tr>
-</table>
+  Tanay Shah- Tshah6@ncsu.edu
+  Aayush Brahmbhatt- Abrahmb@ncsu.edu
+  Naisarg Shah- Nshah29@ncsu.edu
