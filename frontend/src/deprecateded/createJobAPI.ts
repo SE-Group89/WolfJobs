@@ -1,12 +1,7 @@
-// Importing necessary modules and utilities
-// 'toast' is used for displaying success/error notifications to the user
-// 'createJobURL' and 'loginURL' are constants for the API endpoints
-// 'getFormBody' is a utility function for serializing data into a URL-encoded format
 import { toast } from "react-toastify";
 import { createJobURL, loginURL } from "../api/constants";
 import { getFormBody } from "./apiUtils";
 
-// Function to handle creating a new job
 export const createJob = async (
   name: string,
   id: string,
@@ -22,54 +17,52 @@ export const createJob = async (
   affiliation: string,
   navigate: any
 ) => {
-  const url = createJobURL; // The URL for creating a job
+  const url = createJobURL;
   await fetch(url, {
-    method: "POST", // Making a POST request to the server
+    method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded", // Indicating the data is URL-encoded
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: getFormBody({
-      name,           // Job name
-      id,             // Job ID
-      status,         // Job status (active, inactive, etc.)
-      location,       // Job location
-      description,    // Job description
-      pay,            // Salary or pay rate
-      type,           // Job type (e.g., full-time, part-time)
-      question1,      // Custom question for applicants
-      question2,      // Custom question for applicants
-      question3,      // Custom question for applicants
-      question4,      // Custom question for applicants
-      affiliation,    // Affiliation or company details
+      name,
+      id,
+      status,
+      location,
+      description,
+      pay,
+      type,
+      question1,
+      question2,
+      question3,
+      question4,
+      affiliation,
     }),
   })
-    .then((res) => res.json()) // Parsing the response as JSON
+    .then((res) => res.json())
     .then((res) => {
-      // If the job is created successfully (res.success === true)
       if (res.success === true) {
-        navigate("/dashboard"); // Redirecting to the dashboard
-        toast.success("Job created"); // Displaying success message
+        // success
+        navigate("/dashboard");
+        toast.success("Job created");
       }
     });
 };
 
-// Function to handle user login
 export async function login(email: string, password: string, navigate: any) {
-  const url = loginURL; // The URL for logging in
+  const url = loginURL;
   await fetch(url, {
-    method: "POST", // Making a POST request to the server
+    method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded", // Indicating the data is URL-encoded
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: getFormBody({ email, password }), // Serializing the login data
+    body: getFormBody({ email, password }),
   })
-    .then((res) => res.json()) // Parsing the response as JSON
+    .then((res) => res.json())
     .then((data) => {
-      console.log("Login data", data); // Logging the login response (for debugging)
-      // If login is successful (data.success === true)
+      console.log("Login data", data);
       if (data.success) {
-        localStorage.setItem("token", data.data.token); // Storing the token in localStorage
-        navigate("/dashboard"); // Redirecting to the dashboard
+        localStorage.setItem("token", data.data.token);
+        navigate("/dashboard");
       }
     });
 }

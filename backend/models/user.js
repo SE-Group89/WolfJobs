@@ -1,94 +1,107 @@
-// Import the Mongoose library for MongoDB object modeling
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 
-// Define the schema for storing user information
 const userSchema = new mongoose.Schema(
   {
-    // User's email address (must be unique)
     email: {
-      type: String,            // Data type is String
-      required: true,          // This field is required (cannot be empty)
-      unique: true             // Ensures each email is unique in the database
+      type: String,
+      required: true,
+      unique: true,
     },
-    // Verification status of the user's account
     isVerified: {
-      type: Boolean,           // Data type is Boolean
-      default: true            // Default value is true (user is verified)
+      type: Boolean,
+      default: true,
     },
-    // User's password (hashed before storing in production)
     password: {
-      type: String,            // Data type is String
-      required: true           // This field is required
+      type: String,
+      required: true,
     },
-    // User's full name
     name: {
-      type: String,            // Data type is String
-      required: true           // This field is required
+      type: String,
+      required: true,
     },
-    // Role of the user (e.g., applicant, recruiter, admin)
     role: {
-      type: String,            // Data type is String
-      required: true           // This field is required
+      type: String,
+      required: true,
     },
-    // User's address (optional)
     address: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // User's phone number (optional)
     phonenumber: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // Number of hours available or worked by the user (optional)
     hours: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // User's date of birth (optional)
     dob: {
-      type: Date               // Data type is Date
+      type: Date,
     },
-    // User's gender (optional)
     gender: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // User's availability status (e.g., part-time, full-time)
     availability: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // User's affiliation (e.g., university, company)
     affiliation: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // User's skills (comma-separated or single string)
     skills: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // Resume file path or URL (optional)
     resume: {
-      type: String,            // Data type is String
-      default: ""              // Default value is an empty string
+      type: String,
+      default: "",
     },
-    // Reference to the resume document in the 'Resume' collection
+    unityId: {
+      type: String,
+      default: "",
+    },
+    studentId: {
+      type: String,
+      default: "",
+    },
     resumeId: {
-      type: mongoose.Schema.Types.ObjectId,  // Data type is ObjectId (links to another document)
-      required: false,                       // This field is optional
-      ref: 'Resume'                          // References the 'Resume' model to establish a relationship
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: "Resume",
     },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allows multiple documents without this field
+    },
+
+    avatar: {
+      type: String,
+      default: "",
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: String,
   },
   {
-    // Automatically add 'createdAt' and 'updatedAt' timestamps to each document
-    timestamps: true
+    timestamps: true,
   }
 );
 
-// Create a Mongoose model called 'User' using the defined schema
+userSchema.methods.getResetToken = async function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+  return resetToken;
+};
+
 const User = mongoose.model("User", userSchema);
 
-// Export the User model for use in other parts of the application
 module.exports = User;

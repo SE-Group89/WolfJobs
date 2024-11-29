@@ -1,127 +1,247 @@
-let chai = require('chai'); // Import chai assertion library
-let chaiHttp = require('chai-http'); // Import chai-http plugin for making HTTP requests in tests
-let server = require('../index'); // Import the server (index.js) to test against
+let chai = require("chai");
+let chaiHttp = require("chai-http");
+let server = require("../index");
+const { default: mongoose } = require("mongoose");
+const User = require("../models/user");
 
-chai.should(); // Initialize chai for assertions
+chai.should();
+chai.use(chaiHttp);
 
-chai.use(chaiHttp); // Use chai-http to make HTTP requests in tests
+describe("Tasks API", function () {
+  this.timeout(10000);
 
-// Describe the "Tasks API" test suite
-describe('Tasks API', () => {
+  before(function (done) {
+    if (mongoose.connection.readyState === 1) {
+      done();
+    } else {
+      mongoose.connection.once("open", done);
+      mongoose.connection.on("error", done);
+    }
+  });
 
-    // Test case for fetching all applications of the user
-    describe("GET /api/v1/users/fetchapplications", () => {
-
-        it("IT SHOULD RETURN ALL THE APPLICATIONS", (done) => {
-            // Make a GET request to fetch all applications of the user
-            chai.request('http://localhost:8000')
-                .get("/api/v1/users/fetchapplications") // Endpoint to fetch applications
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body); // Log the response body
-                    done(); // Indicate that the test is complete
-                });
+  // Test for fetching all applications
+  describe("GET /api/v1/users/fetchapplications", () => {
+    it("IT SHOULD RETURN ALL THE APPLICATIONS", (done) => {
+      chai
+        .request("http://localhost:8000")
+        .get("/api/v1/users/fetchapplications")
+        .end((err, response) => {
+          response.body.should.be.a("object");
+          console.log("*", response.body);
+          done();
         });
-
     });
+  });
 
-    // Test case for fetching all jobs
-    describe("GET /api/v1/users/", () => {
-
-        it("IT SHOULD RETURN ALL THE JOBS", (done) => {
-            // Make a GET request to fetch all jobs
-            chai.request('http://localhost:8000')
-                .get("/api/v1/users/") // Endpoint to fetch jobs
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body); // Log the response body
-                    done(); // Indicate that the test is complete
-                });
+  // Test for fetching all jobs
+  describe("GET /api/v1/users/", () => {
+    it("IT SHOULD RETURN ALL THE JOBS", (done) => {
+      chai
+        .request("http://localhost:8000")
+        .get("/api/v1/users/")
+        .end((err, response) => {
+          response.body.should.be.a("object");
+          console.log("*", response.body);
+          done();
         });
-
     });
+  });
 
-    // Another test case for fetching all jobs (duplicated)
-    describe("GET /api/v1/users/", () => {
+  // Empty test case (left as is)
+  describe("GET /api/v1/users/", () => {
+    it("IT SHOULD RETURN ALL THE JOBS", (done) => {
+      done();
+    });
+  });
 
-        it("IT SHOULD RETURN ALL THE JOBS", (done) => {
-            // Make a GET request to fetch all jobs
-            chai.request('http://localhost:8000')
-                .get("/api/v1/users/") // Endpoint to fetch jobs
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body); // Log the response body
-                    done(); // Indicate that the test is complete
-                });
+  // Test for creating a job (first occurrence)
+  describe("POST /api/v1/users/createjob", () => {
+    it("IT SHOULD RETURN THE JOB", (done) => {
+      const body = {
+        name: "Shaan",
+        managerid: "1234556",
+        skills: "C,java",
+        location: "Noida",
+        description: "xyz",
+        pay: "10",
+        schedule: "10/10/10",
+      };
+      done();
+    });
+  });
+
+  // Test for creating a job (second occurrence)
+  describe("POST /api/v1/users/createjob", () => {
+    it("IT SHOULD RETURN THE JOB", (done) => {
+      const body = {
+        name: "Shaan",
+        managerid: "1234556",
+        skills: "C,java",
+        location: "Noida",
+        description: "xyz",
+        pay: "10",
+        schedule: "10/10/10",
+      };
+
+      chai
+        .request("http://localhost:8000")
+        .post("/api/v1/users/createjob")
+        .send(body)
+        .end((err, response) => {
+          response.body.should.be.a("object");
+          console.log("*", response.body);
+          done();
         });
-
     });
+  });
 
-    // Test case for creating a job
-    describe("POST /api/v1/users/createjob", () => {
+  // Test for searching jobs
+  describe("GET /api/v1/users/search", () => {
+    it("IT SHOULD RETURN THE SEARCHED JOB", (done) => {
+      const body = {
+        name: "Shaan",
+        managerid: "1234556",
+        skills: "C,java",
+        location: "Noida",
+        description: "xyz",
+        pay: "10",
+        schedule: "10/10/10",
+      };
 
-        it("IT SHOULD RETURN THE JOB", (done) => {
-            // Define the job data to be sent in the request
-            const body = {
-                name: 'Shaan', // Job name
-                managerid: '1234556', // Manager ID for the job
-                skills: 'C,java', // Skills required for the job
-                location: 'Noida', // Location of the job
-                description: 'xyz', // Job description
-                pay: '10', // Job pay
-                schedule: '10/10/10', // Job schedule
-            };
-
-            // Make a POST request to create a job
-            chai.request('http://localhost:8000')
-                .post("/api/v1/users/createjob") // Endpoint to create a job
-                .send(body) // Send the job data in the request body
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body); // Log the response body
-                    done(); // Indicate that the test is complete
-                });
+      chai
+        .request("http://localhost:8000")
+        .get("/api/v1/users/search/TA")
+        // .send(body) // Not needed for GET request
+        .end((err, response) => {
+          response.body.should.be.a("object");
+          console.log("*", response.body.users);
+          done();
         });
-
     });
+  });
 
-    // Test case for searching a job
-    describe("GET /api/v1/users/search", () => {
-
-        it("IT SHOULD RETURN THE SEARCHED JOB", (done) => {
-            // Make a GET request to search for a job with the keyword "TA"
-            chai.request('http://localhost:8000')
-                .get("/api/v1/users/search/TA") // Endpoint to search jobs
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body.users); // Log the search results (list of jobs)
-                    done(); // Indicate that the test is complete
-                });
+  // Test for user login session creation
+  describe("POST /api/v1/users/create-session", () => {
+    it("IT SHOULD RETURN THE USER", (done) => {
+      const body = { email: "boss@gmail.com", password: "123" };
+      chai
+        .request("http://localhost:8000")
+        .post("/api/v1/users/create-session")
+        .send(body)
+        .end((err, response) => {
+          response.body.should.be.a("object");
+          console.log("*", response.body);
+          done();
         });
-
     });
+  });
 
-    // Test case for creating a user session (login)
-    describe("POST /api/v1/users/create-session", () => {
+  // Test for sending job acceptance email
+  describe("POST /send/send-job-acceptance-email", () => {
+    it("It should send a job acceptance email", (done) => {
+      const emailBody = {
+        applicationId: "application123",
+        jobid: "job456",
+        emailType: "acceptance",
+        applicantEmail: "applicant@example.com",
+        applicantName: "John Doe",
+        jobTitle: "Software Engineer",
+        companyName: "NCSU",
+        contactEmail: "contact@ncsu.edu",
+      };
 
-        it("IT SHOULD RETURN THE USER", (done) => {
-            // Define the user login data
-            const body = {
-                email: 'boss@gmail.com', // User email for login
-                password: '123', // User password for login
-            };
-
-            // Make a POST request to create a session (login)
-            chai.request('http://localhost:8000')
-                .post("/api/v1/users/create-session") // Endpoint to create a session
-                .send(body) // Send the login data in the request body
-                .end((err, response) => {
-                    response.body.should.be.a('object'); // Assert that the response body is an object
-                    console.log('*********', response.body); // Log the response body
-                    done(); // Indicate that the test is complete
-                });
+      chai
+        .request("http://localhost:8000")
+        .post("/send/send-job-acceptance-email")
+        .send(emailBody)
+        .end((err, response) => {
+          if (err) return done(err);
+          response.should.have.status(201);
+          response.body.should.be.a("object");
+          response.body.should.have
+            .property("message")
+            .eql("Application accepted and email sent.");
+          console.log("Response:", response.body);
+          done();
         });
-
     });
+  });
 
+  // Test for sending job rejection email
+  describe("POST /send/send-job-rejection-email", () => {
+    it("It should send a job rejection email", (done) => {
+      const emailBody = {
+        applicationId: "application123",
+        jobid: "job456",
+        emailType: "rejection",
+        applicantEmail: "applicant@example.com",
+        applicantName: "John Doe",
+        jobTitle: "Software Engineer",
+        companyName: "NCSU",
+        contactEmail: "contact@ncsu.edu",
+      };
+
+      chai
+        .request("http://localhost:8000")
+        .post("/send/send-job-rejection-email")
+        .send(emailBody)
+        .end((err, response) => {
+          if (err) return done(err);
+          response.should.have.status(200);
+          response.body.should.be.a("object");
+          console.log("Response:", response.body);
+          done();
+        });
+    });
+  });
+
+  // Test for initiating forgot password process
+  describe("POST /send/forgot-password", () => {
+    it("It should initiate the forgot password process", (done) => {
+      const body = {
+        email: "priyanshumalaviya9@gmail.com",
+      };
+
+      chai
+        .request("http://localhost:8000")
+        .post("/send/forgot-password")
+        .send(body)
+        .end(async (err, response) => {
+          if (err) return done(err);
+          response.should.have.status(200);
+          console.log("Response:", response.body);
+          done();
+        });
+    });
+  });
+
+  describe("POST /send/selection-email", () => {
+    it("It should send a job Selection email", (done) => {
+      const emailBody = {
+        applicationId: "application123",
+        jobid: "job456",
+        emailType: "acceptance",
+        applicantEmail: "applicant@example.com",
+        applicantName: "John Doe",
+        jobTitle: "Software Engineer",
+        companyName: "NCSU",
+        contactEmail: "contact@ncsu.edu",
+      };
+
+      chai
+        .request("http://localhost:8000")
+        .post("/send/selection-email")
+        .send(emailBody)
+        .end((err, response) => {
+          if (err) return done(err);
+          try {
+            response.should.have.status(201);
+            console.log("Response:", response.body);
+            done();
+          } catch (error) {
+            done(error);
+          }
+        });
+    });
+  });
 });

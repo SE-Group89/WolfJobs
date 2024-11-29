@@ -121,28 +121,29 @@ module.exports.sendJobSelectionEmail = async (req, res) => {
 
   // Define the onboarding details with the dynamic start date
   const onboardingDetails = `
-    <p>We’re thrilled to welcome you to the team! Here’s what you need to know to get started:</p>
+    <p>We're excited to have you on board! Here are the next steps to get you started:</p>
 
-<ul>
-  <li><strong>Start Date</strong>: ${startDate}</li>
-  <li><strong>Arrival Time</strong>: Please arrive by 9:00 AM</li>
-</ul>
+    <ul>
+      <li><strong>Start Date</strong>: ${startDate}</li>
+      <li><strong>Time</strong>: Please arrive by 9:00 AM</li>
+   
+    </ul>
 
-<p><strong>Documents to Bring:</strong></p>
+    <p><strong>Please bring the following documents:</strong></p>
 
-<ul>
-  <li>A valid government-issued photo ID</li>
-  <li>Completed tax and employment eligibility forms (attached to this email)</li>
-  <li>Direct deposit details</li>
-</ul>
+    <ul>
+      <li>A valid government-issued photo ID</li>
+      <li>Completed tax and employment eligibility forms (attached to this email)</li>
+      <li>Direct deposit information</li>
+    </ul>
 
-<p><strong>Orientation Details:</strong></p>
+    <p><strong>Orientation Schedule:</strong></p>
 
-<p>On your first day, you’ll participate in a short orientation session to familiarize yourself with our company culture, policies, and your new team.</p>
+    <p>On your first day, you'll attend a brief orientation session to introduce you to our company culture, policies, and your new team.</p>
 
-<p>If you have any questions before your start date, don’t hesitate to contact our HR department at ${contactEmail}.</p>
+    <p>If you have any questions before your start date, feel free to reach out to our HR department at ${contactEmail}.</p>
 
-<p>We’re excited to have you on board and look forward to working with you!</p>
+    <p>We look forward to working with you!</p>
   `;
   // Generate the email HTML content
   const emailHtml = jobSelectionTemplate({

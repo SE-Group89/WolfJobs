@@ -1,55 +1,50 @@
 // Resume.test.tsx
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import Resume from '../../../src/Pages/Resume/Resume.tsx'; // Update path as necessary
+import Resume from '../../../src/Pages/Resume/Resume.tsx'; // Adjust the path as needed
 import axios from 'axios';
 
-// Mock implementation for axios.post
-const mockPostRequest = (url: string, payload: any) => {
+// Mocking axios post method
+const mockAxiosPost = (url: string, data: any) => {
   return new Promise((resolve, reject) => {
     if (url === 'http://localhost:8000/resume/parseResume') {
       resolve({
         data: {
           success: true,
-          ats_score: 250, // Mock default score
+          ats_score: 250, // Default mock score
         },
       });
     } else {
-      reject(new Error('Invalid API endpoint'));
+      reject(new Error('Unknown endpoint'));
     }
   });
 };
 
-// Save the original axios.post function for restoration
-const originalPost = axios.post;
+// Override axios post method for tests
+const originalAxiosPost = axios.post;
 
-// Replace axios.post with the mock version before each test
 beforeEach(() => {
-  axios.post = mockPostRequest;
+  axios.post = mockAxiosPost;
 });
 
-// Restore the original axios.post function after each test
 afterEach(() => {
-  axios.post = originalPost;
+  axios.post = originalAxiosPost;
 });
 
-// Helper function to render the Resume component
-const initializeComponent = () => {
+const setup = () => {
   return render(<Resume />);
 };
 
-describe('Resume Component Tests', () => {
-  it('should render the Resume component without errors', () => {
-    const { getByText } = initializeComponent();
+describe('Resume Component', () => {
+  it('should render the Resume page without crashing', () => {
+    const { getByText } = setup();
 
-    // Verify the presence of a heading or title like "Resume"
+    // Assuming the Resume page has a heading or title like "Resume"
     expect(getByText(/Resume/i)).toBeInTheDocument();
   });
 
-  it('ATS Score Visibility - initially hidden and displays after action', () => {
-    const { container } = initializeComponent();
-
-    // Ensure the initial render state matches expectations
-    expect(container).toMatchSnapshot();
+  it('ATS Score Visibility - should not show ATS score initially and show after running', () => {
+    const { container } = setup();
+    expect(container).toMatchSnapshot(); // Initial state snapshot
   });
 });
