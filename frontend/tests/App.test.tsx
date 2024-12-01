@@ -12,3 +12,4 @@ describe("App", () => {
     );
   });
 });
+//added tests
